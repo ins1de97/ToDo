@@ -5,45 +5,49 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ToDo App</title>
+    <link rel="stylesheet" href="./src/scss/style.css">
 </head>
 
 <body>
     <div class="wrapper">
         <div class="task-manager">
             <div class="container">
-                <div class="task-manager__add-tasks">
-                    <input type="text" class="task-manager__input" placeholder="Add a new task">
+                <form id="form" class="task-manager__add-tasks">
+                    <input id="form-input" type="text" class="task-manager__input" placeholder="Add a new task" required>
                     <button class="task-manager__add-button"><img src="./public/svg/Plus.svg" alt="button"></button>
-                </div>
+                </form>
                 <div class="task-manager__tasks">
                     <h2 class="task-manager__title">Tasks to do</h2>
-                    <ul class="task-manager__list">
+                    <ul id="task-list" class="task-manager__list">
                         <li class="task-manager__item">
                             <span class="task-manager__text">To study React fundamentals</span>
-                            <button class="task-manager__check-button"><img src="./public/svg/chek_mark.svg" alt=""></button>
-                            <button class="task-manager__delete-button"><img src="./public/svg/delete.svg" alt=""></button>
+                            <button class="task-manager__check-button" data-action="done"><img src="./public/svg/chek_mark.svg" alt=""></button>
+                            <button class="task-manager__delete-button" data-action="delete"><img src="./public/svg/delete.svg" alt=""></button>
                         </li>
                         <li class="task-manager__item">
                             <span class="task-manager__text">To study React fundamentals</span>
-                            <button class="task-manager__check-button"><img src="./public/svg/chek_mark.svg" alt=""></button>
-                            <button class="task-manager__delete-button"><img src="./public/svg/delete.svg" alt=""></button>
+                            <button class="task-manager__check-button" data-action="done"><img src="./public/svg/chek_mark.svg" alt=""></button>
+                            <button class="task-manager__delete-button" data-action="delete"><img src="./public/svg/delete.svg" alt=""></button>
                         </li>
                         <li class="task-manager__item">
                             <span class="task-manager__text">To study React fundamentals</span>
-                            <button class="task-manager__check-button"><img src="./public/svg/chek_mark.svg" alt=""></button>
-                            <button class="task-manager__delete-button"><img src="./public/svg/delete.svg" alt=""></button>
+                            <button class="task-manager__check-button" data-action="done"><img src="./public/svg/chek_mark.svg" alt=""></button>
+                            <button class="task-manager__delete-button" data-action="delete"><img src="./public/svg/delete.svg" alt=""></button>
                         </li>
                         <li class="task-manager__item">
                             <span class="task-manager__text">To study React fundamentals</span>
-                            <button class="task-manager__check-button"><img src="./public/svg/chek_mark.svg" alt=""></button>
-                            <button class="task-manager__delete-button"><img src="./public/svg/delete.svg" alt=""></button>
+                            <button class="task-manager__check-button" data-action="done"><img src="./public/svg/chek_mark.svg" alt=""></button>
+                            <button class="task-manager__delete-button" data-action="delete"><img src="./public/svg/delete.svg" alt=""></button>
                         </li>
                     </ul>
                 </div>
         
-                <div class="task-manager__done">
-                    <h2 class="task-manager__title">Done</h2>
-                    <ul class="task-manager__list">
+                <div id="task-done" class="task-manager__done">
+                    <div class="task-manager__header">
+                        <h2 class="task-manager__title">Done</h2>
+                        <button class="task-manager__clear-button" data-action="clear">Clear</button>
+                    </div>
+                    <ul id="done-list" class="task-manager__list">
                         <li class="task-manager__item task-manager__item--completed">
                             <span class="task-manager__text">To study React fundamentals</span>
                         </li>
