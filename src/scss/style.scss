@@ -6,129 +6,157 @@ body {
     font-weight: 400;
     line-height: 19px;
     background-color: #0D0714;
+}
 
-    h2 {
-        color: #ffffff;
-        font-weight: 400;
+h2 {
+    color: #ffffff;
+    font-weight: 400;
+}
+
+.wrapper {
+    min-height: 100%;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container {
+    max-width: 432px;
+    margin: 0 auto;
+    padding: 0 15px;
+    height: 100%;
+}
+
+.task-manager {
+    width: 583px;
+    margin-top: 110px;
+    box-sizing: border-box;
+    border: 1px solid #ffffff;
+    border-radius: 20px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    background: #1d1825;
+
+    &__add-tasks {
+        padding: 50px 0 59px;
+        display: flex;
+        justify-content: space-between;
+        gap: 11px;
     }
 
-    .wrapper {
-        min-height: 100%;
+    &__input {
         width: 100%;
-        overflow: hidden;
+        height: 40px;
+        padding: 10px 15px;
+        color: #ffffff;
+        box-sizing: border-box;
+        border: 1px solid rgb(158, 120, 207);
+        border-radius: 10px;
+        background: inherit;
+    }
+
+    &__add-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        border-width: 0px;
+        background: rgb(158, 120, 207);
+    }
+
+    &__title {
+        margin-bottom: 17px;
+    }
+
+    &__list {
+        margin-bottom: 60px;
+        padding: 0;
+        width: 100%;
         display: flex;
         flex-direction: column;
+        gap: 16px;
+    }
+
+    &__item {
+        padding: 22px 20px 23px 21px;
+        list-style: none;
+        display: flex;
         align-items: center;
+        border-radius: 10px;
+        background: rgb(21, 16, 28);
+        color: rgb(158, 120, 207);
 
-        .task-manager {
-            width: 583px;
-            margin-top: 110px;
-            box-sizing: border-box;
-            border: 1px solid #ffffff;
-            border-radius: 20px;
-            box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-            background: #1d1825;
-
-            .container {
-                max-width: 432px;
-                margin: 0 auto;
-                padding: 0 15px;
-                height: 100%;
-
-
-                .task-manager__add-tasks {
-                    padding: 50px 0 59px;
-                    display: flex;
-                    justify-content: space-between;
-                    gap: 11px;
-
-
-                    .task-manager__input {
-                        width: 100%;
-                        height: 40px;
-                        padding: 10px 15px;
-                        box-sizing: border-box;
-                        border: 1px solid rgb(158, 120, 207);
-                        border-radius: 10px;
-                        background: inherit;
-                    }
-
-                    .task-manager__add-button {
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        width: 40px;
-                        height: 40px;
-                        border-radius: 10px;
-                        border-width: 0px;
-                        background: rgb(158, 120, 207);
-                    }
-                }
-
-                .task-manager__tasks {
-
-                    .task-manager__title {
-                        margin-bottom: 17px;
-                    }
-
-                    .task-manager__list {
-                        margin-bottom: 60px;
-                        padding: 0;
-                        width: 100%;
-                        display: flex;
-                        flex-direction: column;
-                        gap: 16px;
-
-                        .task-manager__item {
-                            padding: 22px 20px 23px 21px;
-                            list-style: none;
-                            display: flex;
-                            align-items: center;
-
-                            border-radius: 10px;
-                            background: rgb(21, 16, 28);
-                            color: rgb(158, 120, 207);
-
-                            span {
-                                width: 100%;
-                            }
-
-                            .task-manager__check-button {
-                                width: 30px;
-                                height: 30px;
-                                border-radius: 5px;
-                                background: rgb(21, 16, 28);
-                                cursor: pointer;
-                                border: none;
-                            }
-
-                            .task-manager__delete-button {
-                                width: 30px;
-                                height: 30px;
-                                border-radius: 5px;
-                                background: rgb(21, 16, 28);
-                                cursor: pointer;
-                                border: none;
-                            }
-                        }
-                    }
-                }
-
-                .task-manager__done {
-
-                    .task-manager__title {}
-
-                    .task-manager__list {
-                        color: #78CFB0;
-                        text-decoration-line: line-through;
-                        list-style: none;
-                        padding: 28px 21px;
-                        border-radius: 10px;
-                        background: rgb(21, 16, 28);
-                        margin-bottom: 55px;
-                    }
-                }
-            }
+        span {
+            width: 100%;
         }
     }
+
+    &__check-button {
+        width: 30px;
+        height: 30px;
+        border-radius: 5px;
+        background: rgb(21, 16, 28);
+        cursor: pointer;
+        border: none;
+        margin-right: 8px;
+
+        img {
+            pointer-events: none;
+        }
+    }
+
+    &__delete-button {
+        width: 30px;
+        height: 30px;
+        border-radius: 5px;
+        background: rgb(21, 16, 28);
+        cursor: pointer;
+        border: none;
+
+        img {
+            pointer-events: none;
+        }
+    }
+
+    &__done {
+        margin-bottom: 55px;
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+
+    &__clear-button {
+        width: 90px;
+        height: 40px;
+        color: rgb(158, 120, 207);
+        background-color: inherit;
+        border-radius: 5px;
+        cursor: pointer;
+        border: none;
+    }
+
+    &__list {
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    &__item--completed {
+        color: #78CFB0;
+        text-decoration-line: line-through;
+        list-style: none;
+        padding: 28px;
+        border-radius: 10px;
+        background: rgb(21, 16, 28);
+    }
 }
+
+
+
