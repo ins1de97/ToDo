@@ -1,4 +1,6 @@
-const API = "https://01a39814699ce8fa.mokky.dev/tasks";
+import { FetchWrapper } from "../../shared/FetchWrapper";
+const API = "https://01a39814699ce8fa.mokky.dev";
+const fetchWrapper = new FetchWrapper(API);
 const form = document.getElementById("form");
 const taskInput = document.getElementById("form-input");
 const taskList = document.getElementById("task-list");
@@ -19,7 +21,7 @@ async function addTask(e) {
     done: false,
   };
   try {
-    const task = await addServerTask(newTask);
+    const task = await fetchWrapper.post("tasks", newTask);
     tasks.push(task);
     saveToLocalStorage("tasks", tasks);
     renderTask(task);
@@ -36,7 +38,7 @@ async function deleteTask(e) {
     const id = Number(taskItem.id);
     tasks = tasks.filter((task) => task.id !== id);
     try {
-      await deleteServerTask(id);
+      await fetchWrapper.delete("tasks", id);
       saveToLocalStorage("tasks", tasks);
       taskItem.remove();
     } catch (error) {
@@ -54,7 +56,7 @@ async function doneTask(e) {
     );
     const task = tasks.find((task) => task.id === id);
     try {
-      await doneServerTask(id, task);
+      await fetchWrapper.patch("tasks", task, id);
       saveToLocalStorage("tasks", tasks);
       taskItem.remove();
       renderTask(task);
@@ -68,7 +70,7 @@ async function clearDoneList(e) {
   if (e.target.dataset.action === "clear") {
     tasks = tasks.filter((task) => !task.done);
     try {
-      await clearServerDoneTask(tasks);
+      await fetchWrapper.clear("tasks", tasks);
       saveToLocalStorage("tasks", tasks);
       taskListDone.innerHTML = "";
     } catch (error) {
@@ -102,90 +104,15 @@ function renderTasks(tasks) {
   }
 }
 
-async function getServerTasks() {
-  try {
-    const respons = await fetch(API);
-    const result = await respons.json();
-    return result;
-  } catch (error) {
-    throw error;
-  }
-}
-
-async function addServerTask(payload) {
-  try {
-    const response = await fetch(API, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-    if (!response.ok) {
-      throw new Error("Falled to add");
-    }
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    throw error;
-  }
-}
-
-async function deleteServerTask(id) {
-  try {
-    const response = await fetch(API + "/" + id, {
-      method: "DELETE",
-    });
-    if (!response.ok) {
-      throw new Error("Задача не удалена");
-    }
-  } catch (error) {
-    throw error;
-  }
-}
-
-async function doneServerTask(id, payload) {
-  try {
-    const respons = await fetch(API + "/" + id, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-    if (!respons.ok) {
-      throw new Error("Ошибка ответа от сервера");
-    }
-  } catch (error) {
-    throw error;
-  }
-}
-async function clearServerDoneTask(payload) {
-  try {
-    const respons = await fetch(API, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-    if (!respons.ok) {
-      throw new Error("Ошибка ответа от сервера");
-    }
-  } catch (error) {
-    throw error;
-  }
-}
-
 async function getTasks() {
   let tasks = null;
   if (localStorage.getItem("tasks")) {
     tasks = JSON.parse(localStorage.getItem("tasks"));
   } else {
     try {
-      tasks = await getServerTasks();
+      tasks = fetchWrapper.get("tasks");
     } catch (error) {
-      console.log("Falled to tasks");
+      console.log(error);
     }
   }
   return tasks;
