@@ -1,19 +1,29 @@
 import { FetchWrapper } from "../../shared/FetchWrapper";
+import { TaskListModel } from "./TaskListModel";
+import { TaskListRepository } from "./TaskListRepository";
 const API = "https://01a39814699ce8fa.mokky.dev";
 const fetchWrapper = new FetchWrapper(API);
 const form = document.getElementById("form");
 const taskInput = document.getElementById("form-input");
 const taskList = document.getElementById("task-list");
 const taskListDone = document.getElementById("done-list");
-const taskDone = document.getElementById("task-done");
-let tasks = await getTasks();
+const taskWrapper = document.getElementById("tasks");
 
-form.addEventListener("submit", addTask);
-taskList.addEventListener("click", deleteTask);
-taskList.addEventListener("click", doneTask);
-taskDone.addEventListener("click", clearDoneList);
+let initialValue = await getTasks();
+const { addTask, deleteTask, toggleTask, getTaskById, tasks } =
+  new TaskListModel(initialValue);
 
-async function addTask(e) {
+const taskRepository = new TaskListRepository();
+
+tasks.subscribe((value) => {
+  saveToLocalStorage("tasks", value);
+});
+
+form.addEventListener("submit", addTaskV);
+taskList.addEventListener("click", doneTaskV);
+taskWrapper.addEventListener("click", deleteTaskV);
+
+async function addTaskV(e) {
   e.preventDefault();
   const taskText = taskInput.value;
   const newTask = {
@@ -21,9 +31,8 @@ async function addTask(e) {
     done: false,
   };
   try {
-    const task = await fetchWrapper.post("tasks", newTask);
-    tasks.push(task);
-    saveToLocalStorage("tasks", tasks);
+    const task = await taskRepository.addTask(newTask);
+    addTask(task);
     renderTask(task);
     taskInput.value = "";
     taskInput.focus();
@@ -32,14 +41,13 @@ async function addTask(e) {
   }
 }
 
-async function deleteTask(e) {
+async function deleteTaskV(e) {
   if (e.target.dataset.action === "delete") {
     const taskItem = e.target.closest(".task-manager__item");
     const id = Number(taskItem.id);
-    tasks = tasks.filter((task) => task.id !== id);
     try {
       await fetchWrapper.delete("tasks", id);
-      saveToLocalStorage("tasks", tasks);
+      deleteTask(id);
       taskItem.remove();
     } catch (error) {
       console.log("Ошибка при удалении, попробуйте еще раз");
@@ -47,32 +55,20 @@ async function deleteTask(e) {
   }
 }
 
-async function doneTask(e) {
+async function doneTaskV(e) {
   if (e.target.dataset.action === "done") {
     const taskItem = e.target.closest(".task-manager__item");
     const id = Number(taskItem.id);
-    tasks = tasks.map((item) =>
-      item.id === id ? { ...item, done: !item.done } : item
-    );
-    const task = tasks.find((task) => task.id === id);
+    const task = getTaskById(id);
     try {
-      await fetchWrapper.patch("tasks", task, id);
-      saveToLocalStorage("tasks", tasks);
+      const newTask = await fetchWrapper.patch(
+        "tasks",
+        { done: !task.done },
+        id
+      );
+      toggleTask(id);
       taskItem.remove();
-      renderTask(task);
-    } catch (error) {
-      console.log("Ошибка! Попробуйте еще раз");
-    }
-  }
-}
-
-async function clearDoneList(e) {
-  if (e.target.dataset.action === "clear") {
-    tasks = tasks.filter((task) => !task.done);
-    try {
-      await fetchWrapper.clear("tasks", tasks);
-      saveToLocalStorage("tasks", tasks);
-      taskListDone.innerHTML = "";
+      renderTask(newTask);
     } catch (error) {
       console.log("Ошибка! Попробуйте еще раз");
     }
@@ -92,9 +88,10 @@ function renderTask(task) {
                             </li>`;
     taskList.insertAdjacentHTML("beforeend", taskHTML);
   } else {
-    const taskHTML = `<li class="task-manager__item task-manager__item--completed">
-    <span class="task-manager__text">${task.text}
-    </span> </li>`;
+    const taskHTML = `<li id="${task.id}" class="task-manager__item task-manager__item--completed">
+    <span class="task-manager__text">${task.text}</span>
+    <button class="task-manager__delete-button" data-action="delete"><img src="./public/svg/delete.svg" alt=""></button> 
+    </li>`;
     taskListDone.insertAdjacentHTML("afterbegin", taskHTML);
   }
 }
