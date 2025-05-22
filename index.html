@@ -23,7 +23,8 @@
               <img src="./public/svg/Plus.svg" alt="button" />
             </button>
           </form>
-          <div class="task-manager__tasks">
+          <div id="tasks">
+            <div class="task-manager__tasks">
             <h2 class="task-manager__title">Tasks to do</h2>
             <ul id="task-list" class="task-manager__list"></ul>
           </div>
@@ -31,11 +32,9 @@
           <div id="task-done" class="task-manager__done">
             <div class="task-manager__header">
               <h2 class="task-manager__title">Done</h2>
-              <button class="task-manager__clear-button" data-action="clear">
-                Clear
-              </button>
             </div>
             <ul id="done-list" class="task-manager__list"></ul>
+          </div>
           </div>
         </div>
       </div>
