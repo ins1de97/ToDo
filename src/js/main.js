@@ -2,7 +2,7 @@ import { FetchWrapper } from "../../shared/FetchWrapper";
 import { TaskListModel } from "./TaskListModel";
 import { TaskListRepository } from "./TaskListRepository";
 const API = "https://01a39814699ce8fa.mokky.dev";
-const fetchWrapper = new FetchWrapper(API);
+
 const form = document.getElementById("form");
 const taskInput = document.getElementById("form-input");
 const taskList = document.getElementById("task-list");
@@ -13,7 +13,7 @@ let initialValue = await getTasks();
 const { addTask, deleteTask, toggleTask, getTaskById, tasks } =
   new TaskListModel(initialValue);
 
-const taskRepository = new TaskListRepository();
+const taskRepository = new TaskListRepository(API);
 
 tasks.subscribe((value) => {
   saveToLocalStorage("tasks", value);
@@ -46,7 +46,7 @@ async function deleteTaskV(e) {
     const taskItem = e.target.closest(".task-manager__item");
     const id = Number(taskItem.id);
     try {
-      await fetchWrapper.delete("tasks", id);
+      await taskRepository.deleteTask(id);
       deleteTask(id);
       taskItem.remove();
     } catch (error) {
@@ -61,11 +61,7 @@ async function doneTaskV(e) {
     const id = Number(taskItem.id);
     const task = getTaskById(id);
     try {
-      const newTask = await fetchWrapper.patch(
-        "tasks",
-        { done: !task.done },
-        id
-      );
+      const newTask = await taskRepository.doneTask({ done: !task.done }, id);
       toggleTask(id);
       taskItem.remove();
       renderTask(newTask);
@@ -107,7 +103,7 @@ async function getTasks() {
     tasks = JSON.parse(localStorage.getItem("tasks"));
   } else {
     try {
-      tasks = fetchWrapper.get("tasks");
+      tasks = taskRepository.getTasks();
     } catch (error) {
       console.log(error);
     }
